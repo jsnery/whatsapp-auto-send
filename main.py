@@ -1,24 +1,33 @@
-import webbrowser
+import subprocess
 from pyautogui import hotkey
 from time import sleep
 
 
-def hotkey_tab(x):
-    for i in range(x):
-        hotkey('tab')
+m = open('msg.txt', encoding='utf-8')
+msg = m.read().replace('\n', '%0A').replace(' ', '%20')
+m.close()
 
 
-contato = 5579999068342
-msg = f"https://api.whatsapp.com/send?phone={contato}&text=Sua%20assinatura%20Expirou%20%E2%9A%A0%EF%B8%8F%0A%0A%F0%9F%92%B2%20Mensal:%20R$35,00%0A%F0%9F%92%B2%20Bimensal:%20R$60,00%0A%F0%9F%92%B2%20Trimestral:%20R$85,00%0A%F0%9F%92%B2%20Semestral:%20R$160,00%0A%F0%9F%92%B2%20Anual:%20R$300,00%0A%0A%F0%9F%92%B5%20Pix:%2008323217530"
+def send_msg(contato: str | int, msg: str):
+    def hotkey_tab(x):
+        for i in range(x):
+            hotkey('tab')
 
-webbrowser.open_new(msg)
-sleep(2)
-hotkey_tab(8)
-hotkey('enter')
-sleep(2)
-hotkey_tab(2)
-hotkey('enter')
-sleep(15)
-hotkey('enter')
-sleep(1)
-hotkey('ctrl', 'w')
+    wpp_api = f"https://api.whatsapp.com/send?phone={contato}&text={msg}"
+    cmd = f'cmd /c start chrome "{wpp_api}" --new-window --start-maximized'
+    subprocess.Popen(cmd, shell=True)
+
+    sleep(5)
+    hotkey_tab(8)
+    hotkey('enter')
+    sleep(2)
+    hotkey_tab(2)
+    hotkey('enter')
+    sleep(15)
+    hotkey('enter')
+    sleep(1)
+    hotkey('ctrl', 'w')
+
+
+if __name__ == '__main__':
+    send_msg(5579999068342, msg)
